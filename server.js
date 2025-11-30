@@ -15,7 +15,7 @@ app.post('/order', async (req, res) => {
     const items = [];
     for(let i = 0; i < req.body.items.length; i++) {
         items.push({
-            productId: req.body.items[i].idItem,
+            productId: parseInt(req.body.items[i].idItem),
             quantity: req.body.items[i].quantidadeItem,
             price: req.body.items[i].valorItem
         });
@@ -31,6 +31,33 @@ app.post('/order', async (req, res) => {
         }
     });
     res.status(201).json(req.body);
+}
+);
+
+app.get('/order/list', async (req, res) => {
+    const orders = await prisma.order.findMany({
+        include: {
+            items: true
+        }
+    });
+    res.status(200).json(orders);
+}
+);
+
+app.get('/order/:id', async (req, res) => {
+    const order = await prisma.order.findUnique({
+        where: {
+            orderId: (req.params.id)
+        },
+        include: {
+            items: true
+        }
+    });
+    if(order) {
+        res.status(200).json(order);
+    } else {
+        res.status(404).json({ error: 'Order not found' });
+    }
 }
 );
 

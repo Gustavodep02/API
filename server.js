@@ -251,7 +251,42 @@ export function authMiddleware(req, res, next) {
     return res.status(401).json({ error: "Token inválido" });
   }
 }
-
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Realiza login e retorna um token JWT
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - senha
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "adm@teste.com"
+ *               senha:
+ *                 type: string
+ *                 example: "12345"
+ *     responses:
+ *       200:
+ *         description: Login feito com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       401:
+ *         description: Credenciais invalidas
+ */
 app.post('/login', (req, res) => {
     const { email, senha } = req.body;
 
